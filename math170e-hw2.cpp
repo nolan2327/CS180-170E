@@ -216,3 +216,12 @@ void countNums(string &str) {
     cout << "Two Count: " << two_count << endl;
     cout << "One Count: " << one_count << endl;
 }
+
+int main() {
+
+//    cout << runPartOne() << endl;
+
+    cout << runPartTwo() << endl;
+
+    return 0;
+}
