@@ -191,9 +191,13 @@ void countNums(string &str) {
     int three_count = 0;
     int two_count = 0;
     int one_count = 0;
+    int zero_count = 0;
 
     for(int i = 0; i < str.size(); i++) {
         switch(str[i]) {
+            case '0':
+                zero_count++;
+                break;
             case '1':
                 one_count++;
                 break;
@@ -215,13 +219,14 @@ void countNums(string &str) {
     cout << "Three Count: " << three_count << endl;
     cout << "Two Count: " << two_count << endl;
     cout << "One Count: " << one_count << endl;
+    cout << "Zero Count: " << zero_count << endl;
 }
 
-int main() {
-
-//    cout << runPartOne() << endl;
-
-    cout << runPartTwo() << endl;
-
-    return 0;
-}
+//int main() {
+//
+//    string str = "2121001011020230110312020201011210112110";
+//
+//    countNums(str);
+//
+//    return 0;
+//}

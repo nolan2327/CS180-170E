@@ -39,9 +39,3 @@ int findMinimumFrequency(int N, std::vector<int> A) {
 
     return min_val;
 }
-
-
-int main() {
-
-    return 0;
-}
