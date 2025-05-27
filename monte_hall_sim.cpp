@@ -56,6 +56,10 @@ private:
 };
 
 int main() {
+    /*
+     Simulation shows switching wins at a significantly greater rate than not switching.
+     Numbers show around 2000 to 1000 ratio of 1000 runs per door
+     */
     RunMonteHallSimulation sim;
 
     sim.runSimulation(1000);
