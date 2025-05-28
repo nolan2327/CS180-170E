@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <thread>
 
 using namespace std;
 
@@ -41,6 +42,10 @@ public:
         }
     }
 
+    int getSwitchWins() const { return timesSuccessSwitch; }
+    int getNoSwitchWins() const { return timesSuccessNoSwitch; }
+
+
     void printResults() const {
         cout << "When switching doors: " << timesSuccessSwitch << endl;
         cout << "When not switching doors: " << timesSuccessNoSwitch << endl;
@@ -57,12 +62,43 @@ private:
 
 int main() {
     /*
-     Simulation shows switching wins at a significantly greater rate than not switching.
-     Numbers show around 2000 to 1000 ratio of 1000 runs per door
-     */
-    RunMonteHallSimulation sim;
+    According to Wikipedia,
+    "Suppose you're on a game show, and you're given the choice of three doors:
+    Behind one door is a car; behind the others, goats. You pick a door, say No.1,
+    and the host, who knows what's behind the doors, opens another door, say
+    No.3, which has a goat. He then says to you, "Do you want to pick door No.2?"
+    Is it to your advantage to switch your choice?"
 
-    sim.runSimulation(1000);
+    Short answer: yes. This can be simulated to show that the probability of
+    selecting the door with the car goes from 1/3 to 2/3 if you switch the door
+    you originally chose.
+    */
 
-    sim.printResults();
+    // Adjust to simulate more runs
+    const int totalRuns = 3'000'000;
+    const int runsPerThread = totalRuns / 3;
+
+    // Create 3 simulators and 3 threads
+    RunMonteHallSimulation sim1, sim2, sim3;
+    thread t1(&RunMonteHallSimulation::runSimulation, &sim1, runsPerThread / 3);
+    thread t2(&RunMonteHallSimulation::runSimulation, &sim2, runsPerThread / 3);
+    thread t3(&RunMonteHallSimulation::runSimulation, &sim3, runsPerThread / 3);
+
+    // Wait for all threads to complete
+    t1.join();
+    t2.join();
+    t3.join();
+
+    // Aggregate results from threads
+    int totalSwitchWins = sim1.getSwitchWins() + sim2.getSwitchWins() + sim3.getSwitchWins();
+    int totalNoSwitchWins = sim1.getNoSwitchWins() + sim2.getNoSwitchWins() + sim3.getNoSwitchWins();
+
+    cout << "Switch wins:     " << totalSwitchWins << endl;
+    cout << "No switch wins:  " << totalNoSwitchWins << endl;
+
+    double total = totalSwitchWins + totalNoSwitchWins;
+    cout << "Switch %:        " << 100.0 * totalSwitchWins / total << "%" << endl;
+    cout << "No switch %:     " << 100.0 * totalNoSwitchWins / total << "%" << endl;
+
+    return 0;
 }
